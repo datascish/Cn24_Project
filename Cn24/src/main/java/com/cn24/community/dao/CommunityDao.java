@@ -11,6 +11,10 @@ public interface CommunityDao {
 	public List<CommunityVO> selectAll(CommunitySearchVO communitySearchVO);
 
 	public CommunityVO selectOne(int id);
+	
+	public int selectCountAll(CommunitySearchVO communitySearchVO);
+	
+	public int insertCommunity(CommunityVO communityVO);
 
 	public int selectMyCommunitiesCount(int userId);
 
@@ -19,7 +23,5 @@ public interface CommunityDao {
 	public int incrementViewCount(int id); // 조회수 증가
 
 	public int incrementRecommendCount(int id); // 추천수 증가
-
-	public int insertCommunity(CommunityVO communityVO);
 
 }

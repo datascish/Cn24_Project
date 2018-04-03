@@ -4,8 +4,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
-import io.github.seccoding.web.pager.annotations.EndRow;
-import io.github.seccoding.web.pager.annotations.StartRow;
+import io.github.seccoding.web.pager.annotaions.EndRow;
+import io.github.seccoding.web.pager.annotaions.StartRow;
 import io.github.seccoding.web.pager.explorer.PageExplorer;
 
 public abstract class Pager {

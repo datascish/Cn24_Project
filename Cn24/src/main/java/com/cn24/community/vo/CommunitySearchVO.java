@@ -1,7 +1,7 @@
 package com.cn24.community.vo;
 
-import io.github.seccoding.web.pager.annotations.EndRow;
-import io.github.seccoding.web.pager.annotations.StartRow;
+import io.github.seccoding.web.pager.annotaions.EndRow;
+import io.github.seccoding.web.pager.annotaions.StartRow;
 
 public class CommunitySearchVO {
 private int pageNo;
