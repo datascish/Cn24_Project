@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="memberController"
+			class="com.cn24.member.web.MemberController">
+		<property name="memberService" ref="memberService" />
+	</bean>
+	
+	<bean id="communityController"
+			class="com.cn24.community.web.CommunityController">
+	</bean>
+	
+	<bean id="mainController"
+			class="com.cn24.main.web.MainController">
+	</bean>
+	
+	<bean id="dealController"
+			class="com.cn24.deal.web.DealController">
+	</bean>
+</beans>

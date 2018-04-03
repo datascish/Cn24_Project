@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="MemberDao">
+  	
+  	<insert id="insertMember" parameterType="MemberVO">
+  		INSERT	INTO	MEMBER	(
+  			ID
+  			,	EMAIL
+  			,	PASSWORD
+  			,	NICKNAME
+  			,	NAME
+  			,	PHONE
+  			,	ADDRESS
+  			,	USER_TYPE
+  			,	BANK_ACCOUNT
+  			,	BANK_NAME
+  			,	REGIST_DATE
+  			,	SALT
+  		)
+  		VALUES	(
+  			MEMBER_ID_SEQ.NEXTVAL
+  			,	#{email}
+  			,	#{password}
+  			,	#{nickname}
+  			,	#{name}
+  			,	#{phone}
+  			,	#{address}
+  			,	#{userType}
+  			,	#{bankAccount}
+  			,	#{bankName}
+  			,	SYSDATE
+  			,	#{salt}
+  		)
+  	</insert>
+  	
+  	<select id="selectMember" parameterType="MemberVO" resultType="MemberVO">
+  		SELECT	ID
+  				,	EMAIL
+  				,	NICKNAME
+  				,	REGIST_DATE
+  				,	SALT
+  		FROM	MEMBER
+  		WHERE	EMAIL	=	#{email}
+  		AND		PASSWORD	=	#{password}
+  	</select>
+  	
+  	<select id="selectSalt" parameterType="string" resultType="string">
+  		SELECT	NVL(SALT, '')
+  		FROM	MEMBER
+  		WHERE	EMAIL = #{email}
+  	</select>
+  	
+  </mapper>
