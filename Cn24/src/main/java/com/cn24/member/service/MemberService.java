@@ -7,5 +7,7 @@ public interface MemberService {
 	public boolean createMember(MemberVO memberVO);
 	
 	public MemberVO readMember(MemberVO memberVO);
+	
+	public boolean removeMember(int id);
 
 }

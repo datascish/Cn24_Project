@@ -10,6 +10,7 @@ public class MemberVO {
 	private String name;
 	private String phone;
 	private String address;
+	private String postNumber;
 	private String userType;
 	private String bankAccount;
 	private String bankName;
@@ -24,7 +25,6 @@ public class MemberVO {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
 
 	public String getEmail() {
 		return email;
@@ -72,6 +72,14 @@ public class MemberVO {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	
+	public String getPostNumber() {
+		return postNumber;
+	}
+
+	public void setPostNumber(String postNumber) {
+		this.postNumber = postNumber;
 	}
 
 	public String getUserType() {

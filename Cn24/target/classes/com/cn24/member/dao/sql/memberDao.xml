@@ -18,6 +18,7 @@
   			,	BANK_NAME
   			,	REGIST_DATE
   			,	SALT
+  			,	POST_NUMBER
   		)
   		VALUES	(
   			MEMBER_ID_SEQ.NEXTVAL
@@ -32,24 +33,36 @@
   			,	#{bankName}
   			,	SYSDATE
   			,	#{salt}
+  			,	#{postNumber}
   		)
   	</insert>
   	
   	<select id="selectMember" parameterType="MemberVO" resultType="MemberVO">
   		SELECT	ID
-  				,	EMAIL
-  				,	NICKNAME
-  				,	REGIST_DATE
-  				,	SALT
-  		FROM	MEMBER
+  					,	EMAIL
+  					,	NICKNAME
+  					,	REGIST_DATE
+  					,	SALT
+  		FROM		MEMBER
   		WHERE	EMAIL	=	#{email}
   		AND		PASSWORD	=	#{password}
   	</select>
   	
+  	<select id="selectCountMemberAll" parameterType="MemberVO" resultType="_int">
+  		<if test="">
+  			
+  		</if>
+  	</select>
+  	
   	<select id="selectSalt" parameterType="string" resultType="string">
   		SELECT	NVL(SALT, '')
-  		FROM	MEMBER
+  		FROM		MEMBER
   		WHERE	EMAIL = #{email}
   	</select>
   	
+  	<delete id="deleteMember" parameterType="_int">
+  		DELETE
+  		FROM		MEMBER
+  		WHERE	ID = #{id}
+  	</delete>
   </mapper>

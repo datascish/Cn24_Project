@@ -2,32 +2,12 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>http://www.cn24.com/regist</title>
-<link rel="stylesheet"
-		type="text/css" href="<c:url value="/static/css/button.css"/>"/>
-<link rel="stylesheet"
-		type="text/css" href="<c:url value="/static/css/input.css"/>"/>
-<script src="<c:url value="/static/js/jquery-3.3.1.min.js"/>" 
-		type="text/javascript"></script>
+<jsp:include page="/WEB-INF/view/template/header.jsp" />
+<jsp:include page="/WEB-INF/view/template/footer.jsp" />
+
 <script type="text/javascript">
 	$().ready(function() {
-		// validation check
-		$("#userId").keyup(function() {
-			var value = $(this).val();
-			if (value != "") {
-				$(this).removeClass("invalid");
-				$(this).addClass("valid");
-			}
-			else {
-				$(this).addClass("invalid");
-				$(this).removeClass("valid");
-			}
-		});
-		
+		// validation check		
 		$("#email").keyup(function() {
 			var value = $(this).val();
 			if (value != "") {
@@ -112,6 +92,18 @@
 			}
 		});
 		
+		$("#postNumber").keyup(function() {
+			var value = $(this).val();
+			if (value != "") {
+				$(this).removeClass("invalid");
+				$(this).addClass("valid");
+			}
+			else {
+				$(this).addClass("invalid");
+				$(this).removeClass("valid");
+			}
+		});
+		
 		$("input[type=radio][name=userType]").change(function() {
 			var value = $(this).val();
 			if (value == "n") {
@@ -144,13 +136,6 @@
 		});
 		
 		$("#registBtn").click(function() {
-			
-			if ($("#userId").val() == "") {
-				alert("아이디를 입력하세요!");
-				$("#userId").focus();
-				$("#userId").addClass("invalid");
-				return false;
-			}
 			
 			if ($("#email").val() == "") {
 				alert("이메일을 입력하세요!");
@@ -202,6 +187,13 @@
 				return false;
 			}
 			
+			if ($("#postNumber").val() == "") {
+				alert("우편번호를 입력하세요!");
+				$("#postNumber").focus();
+				$("#postNumber").addClass("invalid");
+				return false;
+			}
+			
 			if ($("input[type=radio][name=userType]:checked").length == 0) {
 				alert("판매자와 구매자 중 선택하세요!");
 				
@@ -230,19 +222,8 @@
 		});
 	});
 </script>
-</head>
-<body>
-	<div class="wrapper">
-		<form:form modelAttribute="registForm">
-			<div>
-				<%-- TODO userId 중복검사 하기 (ajax) --%>
-				<input type="text" id="userId" 
-						name="userId" placeholder="userId"
-						value="${memberVO.userId}" />
-				<div>
-					<form:errors path="userId" />
-				</div>
-			</div>
+	<div style="bakground-color: ">
+		<form:form modelAttribute="registForm" style="text-align: center;">
 			<div>
 				<%-- TODO userId 중복검사 하기 (ajax) --%>
 				<input type="text" id="email" 
@@ -310,6 +291,15 @@
 			</div>
 			
 			<div>
+				<input type="text" id="postNumber"
+						name="postNumber" placeholder="PostNumber"
+						value="${memberVO.postNumber}"/>
+				<div>
+					<form:errors path="postNumber" />
+				</div>
+			</div>
+			
+			<div>
 				
 				<input type="radio" name="userType" 
 						value="y" style="width: 100px;" />구매자
@@ -327,7 +317,7 @@
 							<form:errors path="bankAccount" />
 						</div>
 					</div>
-					<div>
+					<div> 은행을 선택해 주세요.
 						<select name="bankName" id="bankName">
 							<option value="">선택</option>
 							<option value="KB">국민</option>
@@ -337,16 +327,13 @@
 							<option value="IBK">IBK기업</option>
 							<option value="Nonghyup">농협</option>
 							<option value="Epost">우체국</option>
-							<option value="Etc">기타</option>
 						</select>
 						<form:errors path="bankName" />
 					</div>
 				</form>
 			</div>
-			<div>
+			<div style="text-align: center;">
 				<input style="text-align: center;" class="button" id="registBtn"  value="가입 완료"/>
 			</div>
 		</form:form>
 	</div>
-</body>
-</html>

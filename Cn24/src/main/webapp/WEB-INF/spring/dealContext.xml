@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="dealDao"
+			class="com.cn24.deal.dao.DealDaoImplForOracle">
+		<property name="sqlSessionTemplate" ref="sqlSessionTemplate" />
+	</bean>
+	
+	<bean id="dealService"
+			class="com.cn24.deal.service.DealServiceImpl">
+		<property name="dealDao" ref="dealDao" />
+	</bean>
+</beans>

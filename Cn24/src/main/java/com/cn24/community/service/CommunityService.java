@@ -22,5 +22,7 @@ public interface CommunityService {
 	public boolean incrementViewCount(int id);
 
 	public boolean createCommunity(CommunityVO communityVO);
+	
+	public boolean removeMyCommunities(int userId);
 
 }

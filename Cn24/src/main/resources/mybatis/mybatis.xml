@@ -6,9 +6,14 @@
   	
   	<typeAliases>
   		<typeAlias type="com.cn24.member.vo.MemberVO" alias="MemberVO" />
+  		<typeAlias type="com.cn24.community.vo.CommunityVO" alias="CommunityVO" />
+  		<typeAlias type="com.cn24.community.vo.CommunitySearchVO" alias="CommunitySearchVO" />
+  		<typeAlias type="com.cn24.main.vo.MainVO" alias="MainVO" />
   	</typeAliases>
   	<mappers>
   		<mapper resource="com/cn24/member/dao/sql/memberDao.xml" />
+  		<mapper resource="com/cn24/community/dao/sql/communityDao.xml" />
+  		<mapper resource="com/cn24/main/dao/sql/mainDao.xml" />
   	</mappers>
  	
   </configuration>

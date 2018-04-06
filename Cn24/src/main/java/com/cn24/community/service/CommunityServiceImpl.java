@@ -94,4 +94,11 @@ public class CommunityServiceImpl implements CommunityService {
 		return str;
 	}
 	
+	@Override
+	public boolean removeMyCommunities(int userId) {
+		return communityDao.deleteMyCommunities(userId) > 0;
+	}
+	
+	
+	
 }

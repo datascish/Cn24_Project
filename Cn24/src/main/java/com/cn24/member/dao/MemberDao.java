@@ -10,5 +10,10 @@ public interface MemberDao {
 	public MemberVO selectMember(MemberVO memberVO);
 	
 	public String selectSalt(String email); 
+	
+	// ajax
+	//public int selectCountMemberAll(MemberVO memberVO);
+	
+	public int deleteMember(int id);
 
 }

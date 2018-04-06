@@ -2,17 +2,9 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>http://www.cn24.com</title>
-</head>
-<link rel="stylesheet" type="text/css" href="<c:url value="/static/css/button.css"/>" />
-<link rel="stylesheet" type="text/css" href="<c:url value="/static/css/input.css"/>" />
-<link rel="stylesheet" type="text/css" href="<c:url value="/static/css/link.css"/>" />
-<link rel="stylesheet" type="text/css" href="<c:url value="/static/css/wrapper.css"/>" />
-<script type="text/javascript" src="<c:url value="/static/js/jquery-3.3.1.min.js"/>"></script>
+<jsp:include page="/WEB-INF/view/template/header.jsp" />
+<jsp:include page="/WEB-INF/view/template/footer.jsp" />
+
 <script type="text/javascript">
 	// button click event
 	$().ready(function() {
@@ -24,14 +16,13 @@
 		});
 	});
 </script>
-<body>
 	<form:form modelAttribute="loginForm">
 	<!-- Wrapper box -->
 	<div style="display:inline-block; margin: 0 auto; margin-left: 30%; margin-top: 30%;">
-		<div class="wrapper">
+		
 			<div style="display:inline-block;">
 				<div>
-					<input type="text" id="userId" name="userId" placeholder="ID"/>
+					<input type="text" id="email" name="email" placeholder="Email"/>
 				</div>
 				<div style="display:inline-block;">
 					<input  type="text" id="password" name="password" placeholder="Password" />
@@ -47,7 +38,5 @@
 		<div style="display:inline-block; margin-left: 20px;">
 			<a href="<c:url value="/find"/>">ID / PW 찾기</a>
 		</div>
-	</div>
+	
 	</form:form>
-</body>
-</html>

@@ -1,5 +1,10 @@
 package com.cn24.community.vo;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cn24.member.vo.MemberVO;
@@ -20,6 +25,9 @@ public class CommunityVO {
 	private String imgFile;
 	private String fileName; // 첨부파일 이름
 	
+	private String requestIp; // log 기록 위해 필요함
+	
+	// 회원 정보 가져와야 함
 	private MemberVO memberVO;
 
 	public int getId() {
@@ -95,11 +103,22 @@ public class CommunityVO {
 	}
 
 	public String getFileName() {
+		if (fileName == null) {
+			fileName = "";
+		}
 		return fileName;
 	}
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+	
+	public String getRequestIp() {
+		return requestIp;
+	}
+
+	public void setRequestIp(String requestIp) {
+		this.requestIp = requestIp;
 	}
 
 	public MemberVO getMemberVO() {
@@ -110,5 +129,22 @@ public class CommunityVO {
 		this.memberVO = memberVO;
 	}
 	
+	public String save() {
+		
+		if (file != null && !file.isEmpty()) {
+			// file이 전송되고 그 파일이 비어있지 않다면
+			fileName = file.getOriginalFilename();
+			File newFile = new File("d:/uploadFiles/" + file.getOriginalFilename()); // upload하면 이 위치에 file을 써라
+			try {
+				file.transferTo(newFile);
+				return newFile.getAbsolutePath(); // 전송시킨 파일의 절대경로를 반환
+			} catch (IllegalStateException e) {
+				throw new RuntimeException(e.getMessage(), e);
+			} catch (IOException e) {
+				throw new RuntimeException(e.getMessage(), e);
+			}
+		}
+		return null;
+	}
 
 }

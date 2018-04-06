@@ -4,7 +4,7 @@ import com.cn24.member.dao.MemberDao;
 import com.cn24.member.vo.MemberVO;
 import com.cn24.util.SHA256Util;
 
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
 	private MemberDao memberDao;
 	
 	public void setMemberDao(MemberDao memberDao) {
@@ -38,5 +38,10 @@ public class MemberServiceImpl implements MemberService{
 		memberVO.setPassword(password);
 		
 		return memberDao.selectMember(memberVO);
+	}
+	
+	@Override
+	public boolean removeMember(int id) {
+		return memberDao.deleteMember(id) > 0;
 	}
 }
