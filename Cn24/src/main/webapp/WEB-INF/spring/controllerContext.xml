@@ -6,6 +6,13 @@
 	<bean id="memberController"
 			class="com.cn24.member.web.MemberController">
 		<property name="memberService" ref="memberService" />
+		<property name="communityService" ref="communityService" />
+	</bean>
+	
+	<bean id="myPageController"
+			class="com.cn24.member.web.MyPageController">
+		<property name="memberService" ref="memberService" />
+		<property name="communityService" ref="communityService" />
 	</bean>
 	
 	<bean id="mainController"
@@ -16,5 +23,15 @@
 	<bean id="communityController"
 			class="com.cn24.community.web.CommunityController">
 		<property name="communityService" ref="communityService" />
+	</bean>
+	
+	<bean id="replyController"
+			class="com.cn24.reply.web.ReplyController">
+		<property name="replyService" ref="replyService" />
+	</bean>
+	
+	<bean id="productController"
+			class="com.cn24.product.web.ProductController">
+		<property name="productService" ref="productService" />
 	</bean>
 </beans>

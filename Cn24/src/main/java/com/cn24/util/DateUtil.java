@@ -20,7 +20,7 @@ public class DateUtil {
 	public static Calendar getDateCalendar(int year, int month, int date) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, year);
-		cal.set(Calendar.MONTH, month, -1);
+		cal.set(Calendar.MONTH, month -1);
 		cal.set(Calendar.DAY_OF_MONTH, date);
 		return cal;
 	}
@@ -39,7 +39,7 @@ public class DateUtil {
 		}
 		
 		year = cal.get(Calendar.YEAR);
-		month = cal.get((Calendar.MONTH) + 1);
+		month = cal.get(Calendar.MONTH) + 1;
 		date = cal.get(Calendar.DAY_OF_MONTH);
 		
 		String yearStr = year + "";

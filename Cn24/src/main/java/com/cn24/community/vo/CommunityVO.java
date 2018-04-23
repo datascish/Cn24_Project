@@ -15,14 +15,13 @@ public class CommunityVO {
 	private int id;
 	private String title;
 	private String body;
-	private String userId;
+	private int userId;
 	private String writeDate;
 	
 	private int viewCount;
 	private int recommendCount;
 	
 	private MultipartFile file;
-	private String imgFile;
 	private String fileName; // 첨부파일 이름
 	
 	private String requestIp; // log 기록 위해 필요함
@@ -54,11 +53,11 @@ public class CommunityVO {
 		this.body = body;
 	}
 
-	public String getUserId() {
+	public int getUserId() {
 		return userId;
 	}
 
-	public void setUserId(String userId) {
+	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 
@@ -92,14 +91,6 @@ public class CommunityVO {
 
 	public void setFile(MultipartFile file) {
 		this.file = file;
-	}
-
-	public String getImgFile() {
-		return imgFile;
-	}
-
-	public void setImgFile(String imgFile) {
-		this.imgFile = imgFile;
 	}
 
 	public String getFileName() {

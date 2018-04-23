@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="ProductDao">
+  <resultMap type="ProductVO" id="ProductVOMap">
+  	<id column="ID" property="id" />
+  	<result column="PRODUCT_NAME" property="productName" />
+  	<result column="PRODUCT_DESC" property="productDesc" />
+  	<result column="PRODUCT_PRICE" property="productPrice" />
+  	<result column="USER_ID" property="userId" />
+  	<result column="PRODUCT_REGIST_DATE" property="productRegistDate" />
+  	<result column="PRODUCT_URL" property="productUrl" />
+  	<result column="REQUEST_IP" property="requestIp" />
+  	<result column="P_USER_TYPE" property="userType" />
+  		<association property="memberVO" javaType="MemberVO">
+  			<id column="M_ID" property="id"/>
+  			<result column="EMAIL" property="email"/>
+  			<result column="NICKNAME" property="nickname"/>
+  			<result column="M_USER_TYPE" property="userType"/>
+  			<result column="REGIST_DATE" property="registDate"/>
+  		</association>
+  </resultMap>
+  	
+  	<insert id="insertProduct" parameterType="ProductVO">
+  		INSERT	INTO	PRODUCT	(
+			ID
+			,	PRODUCT_NAME
+			,	PRODUCT_DESC
+			,	PRODUCT_PRICE
+			,	USER_ID
+			,	PRODUCT_REGIST_DATE
+			,	PRODUCT_URL 
+			,	REQUEST_IP
+			,	USER_TYPE		
+  		)
+  		VALUES	(
+  			PRODUCT_ID_SEQ.NEXTVAL
+  			,	#{productName}
+  			,	#{productDesc}
+  			,	#{productPrice}
+  			,	#{userId}
+  			,	SYSDATE
+  			,	#{productUrl}
+  			,	#{requestIp}
+  			,	#{userType}
+  		)
+  	</insert>
+  	
+  	<select id="selectAll" resultMap="ProductVOMap" parameterType="ProductSearchVO">
+  		SELECT	*
+		FROM		(
+						SELECT	ROWNUM	RNUM
+  									,	P.*
+  						FROM		(
+  								SELECT	P.ID		
+  											,	P.PRODUCT_NAME
+  											,	P.PRODUCT_DESC
+  											,	P.PRODUCT_PRICE
+  											,	P.USER_ID	
+  											,	TO_CHAR(P.PRODUCT_REGIST_DATE, 'YYYY-MM-DD HH24:MI:SS')	 PRODUCT_REGIST_DATE
+  											,	P.PRODUCT_URL	
+  											,	P.REQUEST_IP
+  											,	P.USER_TYPE	P_USER_TYPE
+  											,	M.ID	M_ID
+  											,	M.EMAIL
+  											,	M.NICKNAME
+  											,	M.USER_TYPE	M_USER_TYPE
+  											,	M.REGIST_DATE
+  								FROM		PRODUCT	P
+  											,	MEMBER M
+  								WHERE 	P.USER_ID = M.ID(+)
+  								AND		P.USER_TYPE = M.USER_TYPE
+								AND		P.PRODUCT_REGIST_DATE <![CDATA[ <=]]> SYSDATE
+								AND		P.PRODUCT_REGIST_DATE >= ADD_MONTHS(SYSDATE, -1)
+								<choose>
+									<when test="searchType == 1">
+								AND		P.PRODUCT_NAME LIKE '%' || #{searchKeyword} || '%'
+									</when>
+									<when test="searchType == 2">
+								AND		P.PRODUCT_DESC LIKE '%' || #{searchKeyword} || '%'	
+									</when>
+									<when test="searchType == 3">
+								AND		(	P.PRODUCT_NAME LIKE '%' || #{searchKeyword} || '%'
+								OR			P.PRODUCT_DESC LIKE '%' || #{searchKeyword} || '%'	)
+									</when>
+									<when test="searchType == 4">
+								AND		M.NICKNAME LIKE '%' || #{searchKeyword} || '%'	
+									</when>
+									<when test="searchType == 5">
+								AND		M.EMAIL LIKE '%' || #{searchKeyword} || '%'	
+									</when>
+									<when test="searchType == 6">
+								AND		P.PRODUCT_URL LIKE '%' || #{searchKeyword} || '%'	
+									</when>
+								</choose>
+								ORDER BY P.ID DESC
+  							) P
+					WHERE	ROWNUM <![CDATA[ <= ]]> #{endNumber}
+				)
+		WHERE	RNUM >= #{startNumber}		
+  	</select>
+  	
+  	<select id="selectCountAll" parameterType="ProductSearchVO" resultType="_int" >
+  		SELECT	COUNT(P.ID)
+  		FROM		PRODUCT	P
+  					,	MEMBER	M
+  		WHERE	P.USER_ID = M.ID(+)
+  		AND		P.USER_TYPE = M.USER_TYPE
+  		AND		P.PRODUCT_REGIST_DATE <![CDATA[ <=]]> SYSDATE
+		AND		P.PRODUCT_REGIST_DATE >= ADD_MONTHS(SYSDATE, -1)
+		<choose>
+			<when test="searchType == 1">
+		AND		P.PRODUCT_NAME LIKE '%' || #{searchKeyword} || '%'
+			</when>
+			<when test="searchType == 2">
+		AND		P.PRODUCT_DESC LIKE '%' || #{searchKeyword} || '%'	
+			</when>
+			<when test="searchType == 3">
+		AND		(	P.PRODUCT_NAME LIKE '%' || #{searchKeyword} || '%'
+		OR			P.PRODUCT_DESC LIKE '%' || #{searchKeyword} || '%'	)
+			</when>
+			<when test="searchType == 4">
+		AND		M.NICKNAME LIKE '%' || #{searchKeyword} || '%'	
+			</when>
+			<when test="searchType == 5">
+		AND		M.EMAIL LIKE '%' || #{searchKeyword} || '%'	
+			</when>
+			<when test="searchType == 6">
+		AND		P.PRODUCT_URL LIKE '%' || #{searchKeyword} || '%'	
+			</when>
+		</choose>
+  	</select>
+  	
+  	<select id="sortAll" resultMap="ProductVOMap">
+  		SELECT	P.ID
+  					,	P.PRODUCT_NAME
+					,	P.PRODUCT_DESC
+					,	P.PRODUCT_PRICE
+					,	P.USER_ID
+					,	P.PRODUCT_REGIST_DATE
+					,	P.PRODUCT_URL 
+					,	P.REQUEST_IP
+					,	P.USER_TYPE	P_USER_TYPE
+					,	M.ID	M_ID
+					,	M.EMAIL
+					,	M.NICKNAME
+					,	M.USER_TYPE	M_USER_TYPE
+  					,	M.REGIST_DATE
+  		FROM		PRODUCT	P
+  					,	MEMBER	M
+  		WHERE	P.USER_ID = M.ID
+  		ORDER	P.ID	DESC
+  	</select>
+  </mapper>

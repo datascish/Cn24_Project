@@ -1,6 +1,8 @@
 package com.cn24.community.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
@@ -11,7 +13,7 @@ public class CommunityDaoImplForOracle extends SqlSessionDaoSupport implements C
 
 	@Override
 	public List<CommunityVO> selectAll(CommunitySearchVO communitySearchVO) {
-		return getSqlSession().selectOne("CommunityDao.selectAll", communitySearchVO);
+		return getSqlSession().selectList("CommunityDao.selectAll", communitySearchVO);
 	}
 
 	@Override
@@ -36,7 +38,7 @@ public class CommunityDaoImplForOracle extends SqlSessionDaoSupport implements C
 
 	@Override
 	public List<CommunityVO> selectMyCommunities(int userId) {
-		return getSqlSession().selectOne("CommunityDao.selectMyCommunities", userId);
+		return getSqlSession().selectList("CommunityDao.selectMyCommunities", userId);
 	}
 
 	@Override
@@ -50,8 +52,28 @@ public class CommunityDaoImplForOracle extends SqlSessionDaoSupport implements C
 	}
 	
 	@Override
+	public int updateCommunity(CommunityVO communityVO) {
+		return getSqlSession().update("CommunityDao.updateCommunity", communityVO);
+	}
+	
+	@Override
 	public int deleteMyCommunities(int userId) {
 		return getSqlSession().delete("CommunityDao.deleteMyCommunities", userId);
 	}
 
+	@Override
+	public int deleteCommunity(int id) {
+		return getSqlSession().delete("CommunityDao.deleteCommunity", id);
+	}
+
+	@Override
+	public int deleteCommunities(List<Integer> ids, int userId) {
+		// 여러 개의 parameter를 전달하기 위해 map 형식으로 묶어 하나의 parameter로 처리
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("ids", ids);
+		params.put("userId", userId);
+		
+		return getSqlSession().delete("CommunityDao.deleteCommunities", params);
+	}
+	
 }

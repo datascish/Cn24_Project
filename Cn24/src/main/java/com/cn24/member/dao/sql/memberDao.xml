@@ -49,8 +49,10 @@
   	</select>
   	
   	<select id="selectCountMemberAll" parameterType="MemberVO" resultType="_int">
-  		<if test="">
-  			
+  		SELECT	COUNT(ID)
+  		FROM		MEMBER
+  		<if test="email != null and email != ''">
+  			WHERE	EMAIL = #{email}
   		</if>
   	</select>
   	
@@ -58,6 +60,18 @@
   		SELECT	NVL(SALT, '')
   		FROM		MEMBER
   		WHERE	EMAIL = #{email}
+  	</select>
+  	
+  	<select id="selectCountMemberEmail" parameterType="string" resultType="_int">
+  		SELECT	COUNT(ID)
+  		FROM		MEMBER
+  		WHERE	EMAIL = #{email}
+  	</select>
+  	
+  	<select id="selectCountMemberNickname" parameterType="string" resultType="_int">
+  		SELECT	COUNT(ID)
+  		FROM		MEMBER
+  		WHERE	NICKNAME = #{nickname}
   	</select>
   	
   	<delete id="deleteMember" parameterType="_int">

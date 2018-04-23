@@ -4,16 +4,15 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="CommunityDao">
   <resultMap type="CommunityVO" id="CommunityVOMap">
-  		<id column="COMMUNITY_ID" property="id" />
-  		<result column="COMMUNITY_TITLE" property="title" />
-  		<result column="COMMUNITY_BODY" property="body" />
-  		<result column="COMMUNITY_WRITE_DATE" property="writeDate" />
-  		<result column="COMMUNITY_VIEW_COUNT" property="viewCount" />
-  		<result column="COMMUNITY_RECOMMEND_COUNT" property="recommendCount" />
-  		<result column="COMMUNITY_IMG_FILE" property="imgFile" />
-  		<result column="COMMUNITY_FILE_NAME" property="fileName" />
-  		<result column="COMMUNITY_USER_ID" property="userId" />
-  		<result column="COMMUNITY_REQUEST_IP" property="requestIp" />
+  		<id column="ID" property="id" />
+  		<result column="TITLE" property="title" />
+  		<result column="BODY" property="body" />
+  		<result column="WRITE_DATE" property="writeDate" />
+  		<result column="VIEW_COUNT" property="viewCount" />
+  		<result column="RECOMMEND_COUNT" property="recommendCount" />
+  		<result column="FILE_NAME" property="fileName" />
+  		<result column="USER_ID" property="userId" />
+  		<result column="REQUEST_IP" property="requestIp" />
   		<!-- 결과를 다른 객체에 할당 -->
   		<association property="memberVO" javaType="MemberVO">
   			<id column="M_ID" property="id"/>
@@ -24,22 +23,22 @@
   	</resultMap>
   	
   	<select id="selectCountAll" parameterType="CommunitySearchVO" resultType="_int">
-  		SELECT	COUNT(COMMUNITY_ID)
+  		SELECT	COUNT(C.ID)
   		FROM		COMMUNITY C
   					,	MEMBER	M
-  		WHERE	COMMUNITY_USER_ID = M.ID(+)
-  		AND		COMMUNITY_WRITE_DATE <![CDATA[ <=]]> SYSDATE
-		AND		COMMUNITY_WRITE_DATE >= ADD_MONTHS(SYSDATE, -1)
+  		WHERE	C.USER_ID = M.ID(+)
+  		AND		WRITE_DATE <![CDATA[ <=]]> SYSDATE
+		AND		WRITE_DATE >= ADD_MONTHS(SYSDATE, -1)
 		<choose>
 			<when test="searchType == 1">
-		AND		COMMUNITY_TITLE LIKE '%' || #{searchKeyword} || '%'
+		AND		C.TITLE LIKE '%' || #{searchKeyword} || '%'
 			</when>
 			<when test="searchType == 2">
-		AND		COMMUNITY_BODY LIKE '%' || #{searchKeyword} || '%'	
+		AND		C.BODY LIKE '%' || #{searchKeyword} || '%'	
 			</when>
 			<when test="searchType == 3">
-		AND		(	COMMUNITY_TITLE LIKE '%' || #{searchKeyword} || '%'
-		OR			COMMUNITY_BODY LIKE '%' || #{searchKeyword} || '%'	)
+		AND		(	C.TITLE LIKE '%' || #{searchKeyword} || '%'
+		OR			C.BODY LIKE '%' || #{searchKeyword} || '%'	)
 			</when>
 			<when test="searchType == 4">
 		AND		M.NICKNAME LIKE '%' || #{searchKeyword} || '%'	
@@ -48,46 +47,45 @@
 		AND		M.EMAIL LIKE '%' || #{searchKeyword} || '%'	
 			</when>
 			<when test="searchType == 6">
-		AND		COMMUNITY_FILE_NAME LIKE '%' || #{searchKeyword} || '%'	
+		AND		C.FILE_NAME LIKE '%' || #{searchKeyword} || '%'	
 			</when>
 		</choose>	
   	</select>
   	
-  	<select id="selectAll" parameterType="CommunitySearchVO" resultMap="CommunityVOMap">
+  	<select id="selectAll" resultMap="CommunityVOMap" parameterType="CommunitySearchVO">
   		SELECT	*
 		FROM		(
 						SELECT	ROWNUM	RNUM
   									,	C.*
   						FROM		(
-  								SELECT	COMMUNITY_ID		
-  											,	COMMUNITY_TITLE		
-  											,	COMMUNITY_BODY		
-  											,	TO_CHAR(COMMUNITY_WRITE_DATE, 'YYYY-MM-DD HH24:MI:SS')	
-  											,	COMMUNITY_VIEW_COUNT		
-  											,	COMMUNITY_RECOMMEND_COUNT		
-  											,	COMMUNITY_IMG_FILE		
-  											,	COMMUNITY_FILE_NAME	
-  											,	COMMUNITY_USER_ID		
-  											,	COMMUNITY_REQUEST_IP	
+  								SELECT	C.ID		
+  											,	C.TITLE
+  											,	C.BODY	
+  											,	TO_CHAR(C.WRITE_DATE, 'YYYY-MM-DD HH24:MI:SS')	 WRITE_DATE
+  											,	C.VIEW_COUNT		
+  											,	C.RECOMMEND_COUNT		
+  											,	C.FILE_NAME	
+  											,	C.USER_ID		
+  											,	C.REQUEST_IP	
   											,	M.ID	M_ID
   											,	M.EMAIL
   											,	M.NICKNAME
   											,	M.REGIST_DATE
   								FROM		COMMUNITY C
   											,	MEMBER M
-  								WHERE 	COMMUNITY_USER_ID = M.ID(+)
-								AND		COMMUNITY_WRITE_DATE <![CDATA[ <=]]> SYSDATE
-								AND		COMMUNITY_WRITE_DATE >= ADD_MONTHS(SYSDATE, -1)
+  								WHERE 	C.USER_ID = M.ID(+)
+								AND		C.WRITE_DATE <![CDATA[ <=]]> SYSDATE
+								AND		C.WRITE_DATE >= ADD_MONTHS(SYSDATE, -1)
 								<choose>
 									<when test="searchType == 1">
-								AND		COMMUNITY_TITLE LIKE '%' || #{searchKeyword} || '%'
+								AND		C.TITLE LIKE '%' || #{searchKeyword} || '%'
 									</when>
 									<when test="searchType == 2">
-								AND		COMMUNITY_BODY LIKE '%' || #{searchKeyword} || '%'	
+								AND		C.BODY LIKE '%' || #{searchKeyword} || '%'	
 									</when>
 									<when test="searchType == 3">
-								AND		(	COMMUNITY_TITLE LIKE '%' || #{searchKeyword} || '%'
-								OR			COMMUNITY_BODY LIKE '%' || #{searchKeyword} || '%'	)
+								AND		(	C.TITLE LIKE '%' || #{searchKeyword} || '%'
+								OR			C.BODY LIKE '%' || #{searchKeyword} || '%'	)
 									</when>
 									<when test="searchType == 4">
 								AND		M.NICKNAME LIKE '%' || #{searchKeyword} || '%'	
@@ -96,10 +94,10 @@
 								AND		M.EMAIL LIKE '%' || #{searchKeyword} || '%'	
 									</when>
 									<when test="searchType == 6">
-								AND		COMMUNITY_FILE_NAME LIKE '%' || #{searchKeyword} || '%'	
+								AND		C.FILE_NAME LIKE '%' || #{searchKeyword} || '%'	
 									</when>
 								</choose>
-								ORDER BY COMMUNITY_ID DESC
+								ORDER BY C.ID DESC
   							) C
 					WHERE	ROWNUM <![CDATA[ <= ]]> #{endNumber}
 				)
@@ -107,65 +105,62 @@
   	</select>
   	
   	<select id="selectOne" parameterType="_int" resultMap="CommunityVOMap">
-  		SELECT	COMMUNITY_ID		
-  					,	COMMUNITY_TITLE		
-  					,	COMMUNITY_BODY		
-  					,	TO_CHAR(C.WRITE_DATE, 'YYYY-MM-DD HH24:MI:SS') COMMUNITY_WRITE_DATE	
-  					,	COMMUNITY_VIEW_COUNT	
-  					,	COMMUNITY_RECOMMEND_COUNT		
-  					,	COMMUNITY_IMG_FILE		
-  					,	COMMUNITY_FILE_NAME	
-  					,	COMMUNITY_USER_ID		
-  					,	COMMUNITY_REQUEST_IP	
+  		SELECT	C.ID		
+  					,	C.TITLE		
+  					,	C.BODY		
+  					,	TO_CHAR(C.WRITE_DATE, 'YYYY-MM-DD HH24:MI:SS') WRITE_DATE 	
+  					,	C.VIEW_COUNT	
+  					,	C.RECOMMEND_COUNT		
+  					,	C.FILE_NAME	
+  					,	C.USER_ID		
+  					,	C.REQUEST_IP
   					,	M.ID	M_ID
   					,	M.EMAIL
   					,	M.NICKNAME
   					,	M.REGIST_DATE
   		FROM		COMMUNITY C
   					,	MEMBER M
-  		WHERE 	COMMUNITY_USER_ID = M.ID(+)
-  		AND		COMMUNITY_ID = #{id}
+  		WHERE 	C.USER_ID = M.ID
+  		AND		C.ID = #{id}
   	</select>
   	
   	<select id="selectMyCommunitiesCount" parameterType="_int" resultType="_int">
-  		SELECT	COUNT(COMMUNITY_ID)
+  		SELECT	COUNT(ID)
   		FROM		COMMUNITY
-  		WHERE	COMMUNITY_USER_ID = #{userId}
+  		WHERE	C.USER_ID = #{userId}
   	</select>
   	
   	<select id="selectMyCommunities" resultMap="CommunityVOMap" parameterType="_int">
-  		SELECT	COMMUNITY_ID		
-  					,	COMMUNITY_TITLE		
-  					,	COMMUNITY_BODY		
-  					,	TO_CHAR(COMMUNITY_WRITE_DATE, 'YYYY-MM-DD HH24:MI:SS') 	
-  					,	COMMUNITY_VIEW_COUNT	
-  					,	COMMUNITY_RECOMMEND_COUNT		
-  					,	COMMUNITY_IMG_FILE		
-  					,	COMMUNITY_FILE_NAME	
-  					,	COMMUNITY_USER_ID		
-  					,	COMMUNITY_REQEUST_IP	
+  		SELECT	C.ID		
+  					,	C.TITLE		
+  					,	C.BODY		
+  					,	TO_CHAR(C.WRITE_DATE, 'YYYY-MM-DD HH24:MI:SS') 	WRITE_DATE 
+  					,	C.VIEW_COUNT	
+  					,	C.RECOMMEND_COUNT		
+  					,	C.FILE_NAME	
+  					,	C.USER_ID		
+  					,	C.REQUEST_IP
   					,	M.ID	M_ID
   					,	M.EMAIL
   					,	M.NICKNAME
   					,	M.REGIST_DATE
   		FROM		COMMUNITY C
-  					,	MEMBER M
-		WHERE COMMUNITY_USER_ID = M.ID
-		AND	COMMUNITY_USER_ID = #{userId}
+  					, MEMBER M
+		WHERE C.USER_ID = M.ID
+		AND	C.USER_ID = #{userId}
   	</select>
   	
   	<insert id="insertCommunity" parameterType="CommunityVO">
   		INSERT	INTO	COMMUNITY (
-  			COMMUNITY_ID
-  			,	COMMUNITY_TITLE
-  			,	COMMUNITY_BODY
-  			,	COMMUNITY_WRITE_DATE
-  			,	COMMUNITY_VIEW_COUNT
-  			,	COMMUNITY_RECOMMEND_COUNT
-  			,	COMMUNITY_IMG_FILE
-  			,	COMMUNITY_FILE_NAME
-  			,	COMMUNITY_USER_ID
-  			,	COMMUNITY_REQUEST_IP
+  			ID
+  			,	TITLE
+  			,	BODY
+  			,	WRITE_DATE
+  			,	VIEW_COUNT
+  			,	RECOMMEND_COUNT
+  			,	FILE_NAME
+  			,	USER_ID
+  			,	REQUEST_IP
   		)
   		VALUES	(
   			COMMUNITY_ID_SEQ.NEXTVAL
@@ -174,7 +169,6 @@
   			,	SYSDATE
   			,	0
   			,	0
-  			,	#{imgFile}
   			,	#{fileName}
   			,	#{userId}
   			,	#{requestIp}
@@ -183,13 +177,52 @@
   	
   	<update id="incrementViewCount" parameterType="_int">
   		UPDATE	COMMUNITY
-  		SET		COMMUNITY_VIEW_COUNT = COMMUNITY_VIEW_COUNT + 1
-  		WHERE	COMMUNITY_ID = #{id}
+  		SET		VIEW_COUNT = VIEW_COUNT + 1
+  		WHERE	ID = #{id}
   	</update>
   	
   	<update id="incrementRecommendCount" parameterType="_int">
   		UPDATE	COMMUNITY
-  		SET		COMMUNITY_RECOMMEND_COUNT = COMMUNITY_RECOMMEND_COUNT + 1
-  		WHERE	COMMUNITY_ID = #{id}
+  		SET		RECOMMEND_COUNT = RECOMMEND_COUNT + 1
+  		WHERE	ID = #{id}
   	</update>
+  	
+  	<update id="updateCommunity" parameterType="communityVO">
+  		UPDATE	COMMUNITY
+  		SET		WRITE_DATE = SYSDATE
+  					<if test="requestIp != null and requestIp != ''"  >
+  						,	REQUEST_IP = #{requestIp}
+  					</if>
+  					<if test="title != null and title != ''">
+  						,	TITLE = #{title}
+  					</if>
+  					<if test="body != null and body != ''">
+  						,	BODY = #{body}
+  					</if>
+  						,	FILE_NAME = #{fileName}
+  		WHERE	ID = #{id}
+  		AND		USER_ID = #{userId}
+  	</update>
+  	
+  	<delete id="deleteCommunity" parameterType="_int">
+  		DELETE	
+  		FROM		COMMUNITY		
+  		WHERE	ID = #{id}
+  	</delete>
+  	
+  	<delete id="deleteMyCommunities" parameterType="_int">
+  		DELETE	
+  		FROM		COMMUNITY		
+  		WHERE	USER_ID = #{userId}
+  	</delete>
+  	
+  	<delete id="deleteCommunities" parameterType="map">
+  		DELETE
+  		FROM		COMMUNITY
+  		WHERE	USER_ID	= #{userId}
+  		AND		ID IN
+  		<foreach collection="ids" item="id" open="(" close=")" separator=", ">
+  			#{id}
+  		</foreach>
+  	</delete>
   </mapper>

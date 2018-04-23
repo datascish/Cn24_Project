@@ -1,7 +1,7 @@
 package com.cn24.member.vo;
 
 public class MemberVO {
-	// id(pk), userId, email, password, nickname, name, phone, address, userType(seller, buyer 구분)
+	// id(pk), email, password, nickname, name, phone, address, userType(seller, buyer 구분)
 	// buyer를 선택하면 bankAccount, bankList 추가 작성
 	private int id;
 	private String email;

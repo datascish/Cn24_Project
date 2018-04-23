@@ -39,9 +39,6 @@ public class MainController {
 												HttpServletRequest request) {
 		session = request.getSession();
 		
-		if (session.getAttribute(Member.USER) != null ) {
-			return new ModelAndView("redirect:/main");
-		}
 		
 		// TODO 검색 기능 추가
 		

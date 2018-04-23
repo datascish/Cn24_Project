@@ -23,6 +23,12 @@ public interface CommunityService {
 
 	public boolean createCommunity(CommunityVO communityVO);
 	
+	public boolean updateCommunity(CommunityVO communityVO);
+	
 	public boolean removeMyCommunities(int userId);
+	
+	public boolean removeCommunity(int id);
+	
+	public boolean removeCommunities(List<Integer> ids, int userId);
 
 }

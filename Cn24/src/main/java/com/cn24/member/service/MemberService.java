@@ -8,6 +8,12 @@ public interface MemberService {
 	
 	public MemberVO readMember(MemberVO memberVO);
 	
-	public boolean removeMember(int id);
-
+	// ajax - id(email), nickname 중복 체크 
+	public boolean readCountMemberEmail(String email);
+			
+	public boolean readCountMemberNickname(String nickname);
+	
+	public boolean removeMember(int id, String deleteFlag);
+	
+	
 }

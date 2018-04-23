@@ -10,8 +10,14 @@
 		<config>src/main/webapp/WEB-INF/spring/applicationContext.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/controllerContext.xml</config>
 		<config>src/main/webapp/WEB-INF/spring/rootContext.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/productContext.xml</config>
 	</configs>
 	<autoconfigs>
+		<config>src/main/webapp/WEB-INF/spring/memberContext.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/communityContext.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/replyContext.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/actionHistoryContext.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/mainContext.xml</config>
 	</autoconfigs>
 	<configSets>
 	</configSets>

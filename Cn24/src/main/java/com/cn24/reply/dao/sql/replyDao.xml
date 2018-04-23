@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="ReplyDao">
+  <resultMap type="ReplyVO" id="ReplyVOMap">
+  	<id column="R_ID" property="id" />
+  	<result column="R_BODY" property="body"/>
+  	<result column="R_REGIST_DATE" property="registDate"/>
+  	<result column="PARENT_REPLY_ID" property="parentReplyId"/>
+  	<result column="LEVEL" property="level" />
+  	<result column="R_USER_ID" property="userId"/>
+  	<result column="COMMUNITY_ID" property="communityId"/>
+  	<association property="communityVO" javaType="CommunityVO">
+	  	<id column="C_ID" property="id" />
+	  	<result column="TITLE" property="title" />
+	  	<result column="C_BODY" property="body" />
+	  	<result column="VIEW_COUNT" property="viewCount" />
+	  	<result column="RECOMMEND_COUNT" property="recommendCount" />
+	  	<result column="FILE_NAME" property="fileName" />
+	  	<result column="C_USER_ID" property="userId" />
+	  	<result column="REQUEST_IP" property="requestIp" />
+  	</association>
+  		<!-- 결과를 다른 객체에 할당 -->
+  	<association property="memberVO" javaType="MemberVO">
+  		<id column="M_ID" property="id"/>
+  		<result column="EMAIL" property="email"/>
+  		<result column="NICKNAME" property="nickname"/>
+  		<result column="M_REGIST_DATE" property="registDate"/>
+  	</association>
+  </resultMap>
+  
+  <select id="selectAllReplies" parameterType="_int" resultMap="ReplyVOMap">
+  	SELECT	LEVEL
+  				,	R.ID	R_ID
+  				,	R.BODY	R_BODY
+  				,	R.REGIST_DATE	R_REGIST_DATE
+  				,	R.PARENT_REPLY_ID
+  				,	R.USER_ID	R_USER_ID
+  				,	R.COMMUNITY_ID
+  				,	C.ID	C_ID
+  				,	C.TITLE
+  				,	C.BODY	C_BODY
+  				,	C.VIEW_COUNT	
+  				,	C.RECOMMEND_COUNT
+  				,	C.FILE_NAME
+  				,	C.REQUEST_IP
+  				,	C.USER_ID	C_USER_ID
+  				,	R_M.ID	M_ID
+  				,	R_M.EMAIL
+  				,	R_M.NICKNAME
+  				,	R_M.REGIST_DATE	M_REGIST_DATE
+  	FROM		REPLY	R
+  				,	COMMUNITY	 C
+  				, MEMBER R_M
+  				, MEMBER C_M
+  	WHERE	R.USER_ID = R_M.ID
+  	AND		R.COMMUNITY_ID = C.ID
+  	AND		C_M.ID = C.USER_ID
+  	AND		R.COMMUNITY_ID = #{communityId}
+  	START	WITH	R.PARENT_REPLY_ID = 0
+  	CONNECT	BY	PRIOR R.ID = R.PARENT_REPLY_ID
+  	ORDER	SIBLINGS	BY	R.ID	ASC
+  </select>
+  
+  <select id="SelectOneReply" parameterType="_int" resultMap="ReplyVOMap">
+  	SELECT	R.ID	R_ID
+  				,	R.BODY	R_BODY
+  				,	R.REGIST_DATE	R_REGIST_DATE
+  				,	R.PARENT_REPLY_ID
+  				,	R.USER_ID	R_USER_ID
+  				,	R.COMMUNITY_ID
+  				,	C.ID	C_ID
+  				,	C.TITLE
+  				,	C.BODY	C_BODY
+  				,	C.VIEW_COUNT	
+  				,	C.RECOMMEND_COUNT
+  				,	C.FILE_NAME
+  				,	C.REQUEST_IP
+  				,	C.USER_ID	C_USER_ID
+  				,	R_M.ID	M_ID
+  				,	R_M.EMAIL
+  				,	R_M.NICKNAME
+  				,	R_M.REGIST_DATE	M_REGIST_DATE
+  	FROM		REPLY	R
+  				,	COMMUNITY	 C
+  				,	MEMBER	C_M
+  				,	MEMBER	R_M
+  	WHERE	R.USER_ID = R_M.ID
+  	AND		R.COMMUNITY_ID = C.ID
+  	AND		C_M.ID = C.USER_ID
+  	AND		R.ID = #{replyId}
+  </select>
+  
+  <select id="nextValue" resultType="_int">
+  	SELECT	REPLY_ID_SEQ.NEXTVAL
+  	FROM		DUAL
+  </select>
+  
+  <insert id="insertReply" parameterType="ReplyVO" >
+  	INSERT	INTO REPLY (
+  		ID
+  		,	BODY
+  		,	REGIST_DATE
+  		,	PARENT_REPLY_ID
+  		,	USER_ID
+  		,	COMMUNITY_ID	
+  	)
+  	VALUES	(
+  		#{id}
+  		,	#{body}
+  		,	SYSDATE
+  		,	#{parentReplyId}
+  		,	#{userId}
+  		,	#{communityId}
+  	)
+  </insert>
+  
+  </mapper>

@@ -95,10 +95,23 @@ public class CommunityServiceImpl implements CommunityService {
 	}
 	
 	@Override
+	public boolean updateCommunity(CommunityVO communityVO) {
+		return communityDao.updateCommunity(communityVO) > 0;
+	}
+	
+	@Override
 	public boolean removeMyCommunities(int userId) {
 		return communityDao.deleteMyCommunities(userId) > 0;
 	}
 	
-	
+	@Override
+	public boolean removeCommunity(int id) {
+		return communityDao.deleteCommunity(id) > 0;
+	}
+
+	@Override
+	public boolean removeCommunities(List<Integer> ids, int userId) {
+		return communityDao.deleteCommunities(ids, userId) > 0;
+	}
 	
 }

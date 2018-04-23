@@ -24,6 +24,12 @@ public interface CommunityDao {
 
 	public int incrementRecommendCount(int id); // 추천수 증가
 	
+	public int updateCommunity(CommunityVO communityVO);
+	
 	public int deleteMyCommunities(int userId); // 회원이 쓴 글 삭제
+	
+	public int deleteCommunity(int id);
+	
+	public int deleteCommunities(List<Integer> ids, int userId);
 
 }
